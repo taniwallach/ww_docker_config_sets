@@ -146,7 +146,7 @@ vim LICENSE
 
 git commit -m "Fix README.md for new repo, and added LICENSE files"
 
-git push -n -f taniwallach_ww_docker_config_sets
+git push -n -f --set-upstream taniwallach_ww_docker_config_sets master
 
-git push -f taniwallach_ww_docker_config_sets
+git push -f --set-upstream taniwallach_ww_docker_config_sets master
 
