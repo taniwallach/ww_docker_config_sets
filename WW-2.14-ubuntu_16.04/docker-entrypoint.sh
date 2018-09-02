@@ -45,12 +45,12 @@ if [ "$1" = 'apache2' ]; then
       cp -R modelCourse $APP_ROOT/courses/
     fi
     # defaultClasslist.lst and adminClasslist.lst files if not existing
-    if [ ! -e "$APP_ROOT/courses/defaultClasslist.lst"  ]; then
+    if [ ! -f "$APP_ROOT/courses/defaultClasslist.lst"  ]; then
       echo "defaultClasslist.lst is being created"
       cd $APP_ROOT/webwork2/courses.dist
       cp *.lst $APP_ROOT/courses/
     fi
-    if [ ! -e "$APP_ROOT/courses/adminClasslist.lst"  ]; then
+    if [ ! -f "$APP_ROOT/courses/adminClasslist.lst"  ]; then
       echo "adminClasslist.lst is being created"
       cd $APP_ROOT/webwork2/courses.dist
       cp *.lst $APP_ROOT/courses/
