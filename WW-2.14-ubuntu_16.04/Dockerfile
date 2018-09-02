@@ -1,6 +1,7 @@
 FROM ubuntu:16.04
 
-ENV WEBWORK_URL=/webwork2 \
+ENV PG_BRANCH=rel-PG-2.14 \
+    WEBWORK_URL=/webwork2 \
     WEBWORK_ROOT_URL=http://localhost \
     WEBWORK_DB_HOST=db \
     WEBWORK_DB_PORT=3306 \
@@ -19,14 +20,12 @@ ENV WEBWORK_URL=/webwork2 \
     # Only /var/log/apache2 is handled by /etc/logrotate.d/apache2.
     APACHE_LOG_DIR=/var/log/apache2 \
     APP_ROOT=/opt/webwork \
-    DEV=0 \
-    PG_VERSION=rel-PG-2.14
+    DEV=0
 
 ENV WEBWORK_DB_DSN=DBI:mysql:${WEBWORK_DB_NAME}:${WEBWORK_DB_HOST}:${WEBWORK_DB_PORT} \
     WEBWORK_ROOT=$APP_ROOT/webwork2 \
     PG_ROOT=$APP_ROOT/pg \
     PATH=$PATH:$APP_ROOT/webwork2/bin
-
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends --no-install-suggests \
@@ -81,10 +80,19 @@ RUN apt-get update \
 
 RUN mkdir -p $APP_ROOT/courses $APP_ROOT/libraries $APP_ROOT/webwork2
 
+# Block to include webwork2 in the container, when needed, instead of  getting it from a bind mount.
+#    Uncomment when needed, and set the correct branch name on the following line.
+#ENV WEBWORK_BRANCH=rel-ww2.14   # need a valid branch name from https://github.com/openwebwork/webwork2
+#RUN curl -fSL https://github.com/openwebwork/webwork2/archive/${WEBWORK_BRANCH}.tar.gz -o /tmp/${WEBWORK_BRANCH}.tar.gz \
+#    && cd /tmp \
+#    && tar xzf /tmp/${WEBWORK_BRANCH}.tar.gz \
+#    && mv webwork2-${WEBWORK_BRANCH} $APP_ROOT/webwork2 \
+#    && rm -rf /tmp/${WEBWORK_BRANCH}.tar.gz /tmp/webwork2-${WEBWORK_BRANCH}
 
-RUN curl -fSL https://github.com/openwebwork/pg/archive/${PG_VERSION}.tar.gz -o /tmp/${PG_VERSION}.tar.gz \
-    && tar xzf /tmp/${PG_VERSION}.tar.gz \
-    && mv pg-${PG_VERSION} $APP_ROOT/pg \
+RUN curl -fSL https://github.com/openwebwork/pg/archive/${PG_BRANCH}.tar.gz -o /tmp/${PG_BRANCH}.tar.gz \
+    && tar xzf /tmp/${PG_BRANCH}.tar.gz \
+    && mv pg-${PG_BRANCH} $APP_ROOT/pg \
+    && rm /tmp/${PG_BRANCH}.tar.gz \
     && curl -fSL https://github.com/openwebwork/webwork-open-problem-library/archive/master.tar.gz -o /tmp/opl.tar.gz \
     && tar xzf /tmp/opl.tar.gz \
     && mv webwork-open-problem-library-master $APP_ROOT/libraries/webwork-open-problem-library \
@@ -94,12 +102,18 @@ RUN curl -fSL https://github.com/openwebwork/pg/archive/${PG_VERSION}.tar.gz -o 
     && mv MathJax-master $APP_ROOT/MathJax \
     && rm /tmp/mathjax.tar.gz 
 
+
+RUN echo "PATH=$PATH:$APP_ROOT/webwork2/bin" >> /root/.bashrc
+
 COPY . $APP_ROOT/webwork2
 
-RUN cd $APP_ROOT/webwork2/courses.dist \
-    && cp *.lst $APP_ROOT/courses/ \
-    && cp -R modelCourse $APP_ROOT/courses/ \
-    && cd $APP_ROOT/pg/lib/chromatic \
+# Move these lines into docker-entrypoint.sh so the bind mount of courses
+# will be available
+#RUN cd $APP_ROOT/webwork2/courses.dist \
+#    && cp *.lst $APP_ROOT/courses/ \
+#    && cp -R modelCourse $APP_ROOT/courses/
+
+RUN cd $APP_ROOT/pg/lib/chromatic \
     && gcc color.c -o color
 
 # setup apache
