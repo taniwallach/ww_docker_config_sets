@@ -54,6 +54,10 @@ if [ "$1" = 'apache2' ]; then
       echo "adminClasslist.lst is being created"
       cd $APP_ROOT/webwork2/courses.dist
       cp *.lst $APP_ROOT/courses/
+    # run OPL-update if necessary
+    if [ ! -f "$APP_ROOT/webwork2/htdocs/DATA/tagging-taxonomy.json"  ]; then
+      cd $APP_ROOT/webwork2/bin
+      ./OPL-update
     fi
     # generate apache2 reload config if needed
     if [ $DEV -eq 1 ]; then
