@@ -18,5 +18,5 @@ made to those files.
 
 The Git history from the Docker files in the repositories 
   * rel-ww2.14 of https://github.com/openwebwork/webwork2
-  * rel-ww2.14 of //github.com/nmoller/webwork2
+  * rel-ww2.14 of https://github.com/nmoller/webwork2
 (as of 2 Sept 2018) was preserved to the best extent I could do.
