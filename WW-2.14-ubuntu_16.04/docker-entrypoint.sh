@@ -37,6 +37,24 @@ if [ "$1" = 'apache2' ]; then
         chown www-data:root -R $APP_ROOT/courses
         echo "Admin course is created."
     fi
+    # modelCourses link if not existing
+    if [ ! -d "$APP_ROOT/courses/modelCourse" ]; then
+      echo "create modelCourse subdirectory"
+      rm -rf $APP_ROOT/courses/modelCourse
+      cd $APP_ROOT/webwork2/courses.dist
+      cp -R modelCourse $APP_ROOT/courses/
+    fi
+    # defaultClasslist.lst and adminClasslist.lst files if not existing
+    if [ ! -e "$APP_ROOT/courses/defaultClasslist.lst"  ]; then
+      echo "defaultClasslist.lst is being created"
+      cd $APP_ROOT/webwork2/courses.dist
+      cp *.lst $APP_ROOT/courses/
+    fi
+    if [ ! -e "$APP_ROOT/courses/adminClasslist.lst"  ]; then
+      echo "adminClasslist.lst is being created"
+      cd $APP_ROOT/webwork2/courses.dist
+      cp *.lst $APP_ROOT/courses/
+    fi
     # generate apache2 reload config if needed
     if [ $DEV -eq 1 ]; then
         echo "PerlModule Apache2::Reload" > /etc/apache2/conf-enabled/apache2-reload.conf
