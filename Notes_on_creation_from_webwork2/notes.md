@@ -121,14 +121,30 @@ git commit Notes_on_creation_from_webwork2/notes.md -m "Save creation notes in a
 vim README.md
 vimdiff README.md Notes_on_creation_from_webwork2/notes.md
 
-git commit README.md Notes_on_creation_from_webwork2/notes.md
+git commit README.md Notes_on_creation_from_webwork2/notes.md -m "additions to creation notes"
 
 
 # Stage 4
 
 git remote add taniwallach_ww_docker_config_sets  https://github.com/taniwallach/ww_docker_config_sets.git
 
-git pull taniwallach_ww_docker_config_sets  --allow-unrelated-histories 
+git pull taniwallach_ww_docker_config_sets master --allow-unrelated-histories 
+
+# need to merge conflicts in README.md
+
+vim README.md
+
+git add README.md
+git commit README.md -m "Fix README.md for new repo"
+
+git mv  LICENSE GPL-v2-LICENSE 
+
+# Get the WW license file from somewhere else on my HD
+cp /data2/webwork_docker_devel2/webwork2/LICENSE .
+vim LICENSE
+# change to be current for 2018
+
+git commit -m "Fix README.md for new repo, and added LICENSE files"
 
 git push -n -f taniwallach_ww_docker_config_sets
 
