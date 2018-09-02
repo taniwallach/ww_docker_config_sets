@@ -1,5 +1,6 @@
 #Dockerfiles for webwork2
 
+## Stage 1
 Collecting docker files and their Git history from webwork2/ using 
 	https://github.com/nmoller/webwork2
 as the source after a major cleanup.
@@ -67,11 +68,12 @@ git rm -rf .gitignore
 git add README.md
 git commit -a 
 
+## Stage 2
+
 vim README.md
 # Wrote this file - stage 2
 
 git commit -a  
-
 
 # Starting stage 2 - cherry-picking the docker commits:
 
@@ -89,4 +91,46 @@ git cherry-pick -e a9aede2576dfd01861d06d436fdb0a1362c467a1
 git cherry-pick -e 7644e9d2b37594cbc99d7e54890d8b9aa0288e33
 git cherry-pick -e 93ec7b0ba3611cfd6d5be901af4580fc19bbff61
 
+## Stage 3
+
+git branch -D rel-ww2.14
+
+git filter-branch --prune-empty  -- --all
+
+git filter-branch -f --commit-filter 'git_commit_non_empty_tree "$@"' -- --all
+
+git reflog expire --expire=now --all && git gc --prune=now --aggressive
+
+mkdir WW-2.14-ubuntu_16.04
+
+git mv docker-compose.yml docker-entrypoint.sh .dockerignore Dockerfile WW-2.14-ubuntu_16.04 
+
+git commit -a -m "Move current (2.14 rc) docker files into WW-2.14-ubuntu_16.04 directory"
+
+vim README.md
+# add stage 3 and stage 4 notes and plans
+
+mkdir Notes_on_creation_from_webwork2
+
+cp README.md Notes_on_creation_from_webwork2/notes.md
+
+git add Notes_on_creation_from_webwork2/notes.md
+
+git commit Notes_on_creation_from_webwork2/notes.md -m "Save creation notes in a subdirectory"
+
+vim README.md
+vimdiff README.md Notes_on_creation_from_webwork2/notes.md
+
+git commit README.md Notes_on_creation_from_webwork2/notes.md
+
+
+# Stage 4
+
+git remote add taniwallach_ww_docker_config_sets  https://github.com/taniwallach/ww_docker_config_sets.git
+
+git pull taniwallach_ww_docker_config_sets  --allow-unrelated-histories 
+
+git push -n -f taniwallach_ww_docker_config_sets
+
+git push -f taniwallach_ww_docker_config_sets
 

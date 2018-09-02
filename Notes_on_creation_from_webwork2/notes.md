@@ -118,6 +118,12 @@ git add Notes_on_creation_from_webwork2/notes.md
 
 git commit Notes_on_creation_from_webwork2/notes.md -m "Save creation notes in a subdirectory"
 
+vim README.md
+vimdiff README.md Notes_on_creation_from_webwork2/notes.md
+
+git commit README.md Notes_on_creation_from_webwork2/notes.md
+
+
 # Stage 4
 
 git remote add taniwallach_ww_docker_config_sets  https://github.com/taniwallach/ww_docker_config_sets.git
