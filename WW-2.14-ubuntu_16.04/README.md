@@ -55,8 +55,10 @@ vim conf/localOverrides.conf.dist
 
 * Debian 9 with Docker CE (by @taniwallach)
 * Windows 10 with Docker CE for Windows (by @taniwallach)
+* MacOS X with Docker CR (by @mgage)
 
 ## Issues reported on:
 
-* Hopefully will remain empty :) 
+* @mgage reported that he had issues when he tried a Docker build after pulling the files into a priorly used webwork2 directory, but that things were fine on a cleanly cloned local repository. 
+
                                                       
