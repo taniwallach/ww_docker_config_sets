@@ -41,18 +41,20 @@ cp -af ../ww_docker_config_sets/WW-2.14-ubuntu_16.04/.dockerignore .
 5. Fix a bug which interferes with MathJax working, if it has not yet been 
 fixed in the rel-2.14 branch.
 ```
-vim conf/localOverrides.conf
+vim conf/localOverrides.conf.dist
 ```
   * Edit the (active) line which sets $webworkURLs{MathJax} and remove
     `$server_root_url/` from the start of the value, so that the value
     will now start with `$webworkURLs{htdocs}/` (as is the case in
     `conf/defaults.config`    
+  * **If you already have** a `vim conf/localOverrides.conf` file (which would not be the case if following this procedure exactly) edit the line in that file **also**.
 
 6. Try to build and start the Docker container: `docker-compose up`
 
 ## Successfully tested on:
 
 * Debian 9 with Docker CE (by @taniwallach)
+* Windows 10 with Docker CE for Windows (by @taniwallach)
 
 ## Issues reported on:
 
